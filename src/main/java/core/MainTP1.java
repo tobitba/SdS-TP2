@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+//TODO: dejo esto solo para poder verlo... borrar antes de entragar
 public class MainTP1 {
 
     private final static String STATIC_FILE = "static";
