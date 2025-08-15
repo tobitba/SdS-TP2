@@ -47,7 +47,7 @@ public class MainTP1 {
         if (generateParticles) {
             double particleRadius = Double.parseDouble(System.getProperty(PARTICLE_RADIUS));
             boolean fixedRadius = Boolean.parseBoolean(System.getProperty(FIXED_RADIUS));
-            ParticleGenerator.generate(n, l, grid::addParticle, generateInputFiles, particleRadius, fixedRadius);
+            ParticleGenerator.generate(n, l, grid::addParticle, particleRadius, fixedRadius, 0.03);
         } else {
             parseInput(grid, n);
         }
@@ -73,7 +73,7 @@ public class MainTP1 {
         Path staticPath = Paths.get(System.getProperty(STATIC_FILE));
         Path dynamicPath = Paths.get(System.getProperty(DYNAMIC_FILE));
         try (BufferedReader staticLines = Files.newBufferedReader(staticPath); BufferedReader dynamicLines = Files.newBufferedReader(dynamicPath)) {
-            InputParser.parseParticlesFiles(staticLines, dynamicLines, grid::addParticle, n);
+            //InputParser.parseParticlesFiles(staticLines, dynamicLines, grid::addParticle, n);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

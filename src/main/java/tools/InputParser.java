@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  */
 
 public class InputParser {
-
+/*
 
     public static void parseParticlesFiles(BufferedReader staticBufferedReader, BufferedReader dynamicBufferedReader, Consumer<Particle> consumer, int n) throws IOException {
         String props, pos;
@@ -32,7 +32,7 @@ public class InputParser {
         if (dynamicBufferedReader.readLine() != null || staticBufferedReader.readLine() != null || i < n) {
             throw new RuntimeException("Error parsing files. Wrong number of particles" + i);
         }
-    }
+    }*/
 
 
 
