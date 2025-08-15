@@ -9,15 +9,20 @@ public class Particle {
     private final double x, y;
     private final double rad;
     private final double prop;
+    private static double speed;
+    private double currentDirection;
+    private double lastDirection;
     private final List<Particle> neighbors;
 
-    public Particle(double x, double y, double rad, double prop) {
+    public Particle(double x, double y, double rad, double prop, double direction) {
         this.id = globalId++;
         this.x = x;
         this.y = y;
         this.rad = rad;
         this.prop = prop;
         this.neighbors = new ArrayList<>();
+        this.currentDirection = direction;
+        this.lastDirection = direction;
     }
 
     public void addNeighbor(Particle neighbor) {
@@ -56,7 +61,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "%d: %.2f:%.2f".formatted(id, x, y);
+        return "%d: %.2f:%.2f".formatted(id, speed, currentDirection);
     }
 
     public String stringNeighborhoods() {
@@ -81,4 +86,8 @@ public class Particle {
     public List<Particle> getNeighbors() {
         return neighbors;
     }
+
+    public static void setSpeed(double speed) { //TODO: esta bien o muy feo esto?
+        Particle.speed = speed;}
+
 }
