@@ -1,4 +1,7 @@
-package CellIndexMethod;
+package tools;
+
+import core.Grid;
+import core.Particle;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

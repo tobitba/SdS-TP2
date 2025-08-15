@@ -1,4 +1,6 @@
-package CellIndexMethod;
+package tools;
+
+import core.Particle;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,6 @@
-package CellIndexMethod;
+package tools;
+
+import core.Particle;
 
 import java.util.Random;
 import java.util.function.Consumer;

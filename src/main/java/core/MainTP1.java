@@ -1,4 +1,9 @@
-package CellIndexMethod;
+package core;
+
+import tools.GraphRenderer;
+import tools.InputParser;
+import tools.ParticleGenerator;
+import tools.PostProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Main {
+public class MainTP1 {
 
     private final static String STATIC_FILE = "static";
     private final static String DYNAMIC_FILE = "dynamic";
