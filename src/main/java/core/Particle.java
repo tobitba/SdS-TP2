@@ -85,7 +85,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "%d: %.2f:%.2f".formatted(id, x, y);
+        return "%d;%.2f;%.2f;%.2f".formatted(id, x, y, direction);
     }
 
 //    public String stringNeighborhoods() {

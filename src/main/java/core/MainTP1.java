@@ -2,6 +2,7 @@ package core;
 
 import tools.GraphRenderer;
 import tools.ParticleGenerator;
+import tools.PostProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,11 +59,12 @@ public class MainTP1 {
             }
         }
         if (showGraph) {
+            PostProcessor postProcessor = new PostProcessor();
             Iterator<List<Particle>> iter = grid.iterator();
             for (int i = 0; iter.hasNext(); i++) {
+                postProcessor.processEpoch(iter.next(),i);
                 if (i == 0)
                     GraphRenderer.show(grid, id, showIDS); // print first grid
-                iter.next();
             }
             GraphRenderer.show(grid, id, showIDS); // print last grid
         }
