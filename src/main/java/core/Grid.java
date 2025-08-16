@@ -1,21 +1,37 @@
 package core;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-public class Grid {
+public class Grid implements Iterable<List<Particle>>{
     private final double L;
     private final int M;
+    private final int maxEpoch;
+    private final double neighborRadius;
+    private final boolean boundPeriodicity;
     private final double cellLength;
-    private final List<List<Particle>> grid;
+
+    private int epoch;
+
+    private List<List<Particle>> grid;
     private final List<Particle> particles;
 
-    public Grid(double L, int M) {
+    public Grid(double L, int M, int maxEpoch, double neighborRadius, boolean boundPeriodicity) {
+        if (M <= 0 || L <= 0 || maxEpoch <= 0 || neighborRadius <= 0)
+            throw new IllegalArgumentException("M, L, maxEpoch and neighborRadius must be positive");
+        if (M >= L/neighborRadius)
+            throw new IllegalArgumentException("M must be smaller than L/neighborRadius");
         this.L = L;
         this.M = M;
+        this.maxEpoch = maxEpoch;
+        this.neighborRadius = neighborRadius;
+        this.boundPeriodicity = boundPeriodicity;
         this.cellLength = L / M;
+
+        epoch = 0;
+
         this.particles = new ArrayList<>();
         this.grid = new ArrayList<>();
         for (int i = 0; i < M*M; i++) {
@@ -23,20 +39,27 @@ public class Grid {
         }
     }
 
+    public Grid(double L, int maxEpoch, double neighborRadius, boolean boundPeriodicity) {
+        this(L, (int) (L/neighborRadius), maxEpoch, neighborRadius, boundPeriodicity);
+    }
+
     /**
      * Particles on horizontal cell borders go to the upper cell,
      * and particles on vertical cell borders go to the right cell.
     */
-    public Grid addParticle(Particle particle) {
+    public void addParticle(Particle particle, boolean addToList) { // TODO es nefasto el boolean de si agregarlo a la lista o no
         double parX = particle.getX();
         double parY = particle.getY();
+        double parRad = particle.getRad();
 
         if (parX >= L || parX < 0 || parY >= L || parY < 0)
             throw new IndexOutOfBoundsException("The particle doesn't fit on the grid");
+        if (Double.compare(parRad, 0) != 0)
+            throw new IllegalArgumentException("The particle is not a point particle");
         int i = (int) (parX / cellLength) + M * (int) (parY / cellLength);
         grid.get(i).add(particle);
-        particles.add(particle);
-        return this;
+        if (addToList)
+            particles.add(particle);
     }
 
     /** To find the amount of particles per cell */
@@ -65,25 +88,52 @@ public class Grid {
         return particles;
     }
 
-    public void performCellIndexMethod(double neighborRadius, boolean boundPeriodicity) {
-        double maxRadius = getParticles().stream()
-                .max(Comparator.comparingDouble(Particle::getRad)).orElseThrow().getRad();
+    @Override
+    public Iterator<List<Particle>> iterator() {
+        return new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return epoch < maxEpoch;
+            }
 
-        if (L/M - 2 * maxRadius <= neighborRadius || neighborRadius <= 0)
-            throw new IllegalArgumentException("NeighborRadius needs to be a positive number smaller than L/M - 2*max_radius");
+            @Override
+            public List<Particle> next() {
+                performCellIndexMethod();
+                for (int i = 0; i < M*M; i++) {
+                    for (Particle particle : grid.get(i)) {
+                        particle.move(L);
+                    }
+                }
 
+                grid = new ArrayList<>();
+                for (int i = 0; i < M*M; i++) {
+                    grid.add(new ArrayList<>());
+                }
+
+                for (Particle particle : getParticles()) {
+                    addParticle(particle, false);
+                }
+
+                epoch++;
+                return particles;
+            }
+        };
+    }
+
+
+    public void performCellIndexMethod() {
         for (int i = 0; i < M*M; i++) {
             for (Particle particle : grid.get(i)) {
                 List<Particle> neighbors = getAboveAndRightAdjacentParticles(i, boundPeriodicity, particle);
                 for (Particle neighbor : neighbors) {
                     if (neighbor.getEdgeDistance(particle, boundPeriodicity, L) <= neighborRadius) {
-                        particle.addNeighbor(neighbor);
-                        neighbor.addNeighbor(particle);
+                        particle.addNeighborDirection(neighbor.getDirection());
+                        neighbor.addNeighborDirection(particle.getDirection());
                     }
                 }
                 for (Particle neighbor : getCurrentCellParticles(i, particle)) {
                     if (neighbor.getEdgeDistance(particle, boundPeriodicity, L) <= neighborRadius)
-                        particle.addNeighbor(neighbor);
+                        particle.addNeighborDirection(neighbor.getDirection());
                 }
 
             }

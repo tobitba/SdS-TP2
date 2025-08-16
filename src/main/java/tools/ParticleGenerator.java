@@ -21,7 +21,7 @@ public class ParticleGenerator {
             if(!fixRadius){
                 r = random.nextDouble(0.1, radius);
             }
-            consumer.accept(new Particle(x, y, r, 1, direction));
+            consumer.accept(new Particle(x, y, r, direction));
         }
         Particle.setSpeed(speed);
     }

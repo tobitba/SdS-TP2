@@ -6,27 +6,23 @@ import java.util.List;
 public class Particle {
     private static int globalId = 1;
     private final int id;
-    private final double x, y;
+    private double x, y;
     private final double rad;
-    private final double prop;
     private static double speed;
-    private double currentDirection;
-    private double lastDirection;
-    private final List<Particle> neighbors;
+    private double direction;
+    private final List<Double> neighborDirections;
 
-    public Particle(double x, double y, double rad, double prop, double direction) {
+    public Particle(double x, double y, double rad, double direction) {
         this.id = globalId++;
         this.x = x;
         this.y = y;
         this.rad = rad;
-        this.prop = prop;
-        this.neighbors = new ArrayList<>();
-        this.currentDirection = direction;
-        this.lastDirection = direction;
+        this.neighborDirections = new ArrayList<>();
+        this.direction = direction;
     }
 
-    public void addNeighbor(Particle neighbor) {
-        this.neighbors.add(neighbor);
+    public void addNeighborDirection(Double neighborDirection) {
+        this.neighborDirections.add(neighborDirection);
     }
 
     private double getDistance(Particle p, boolean boundPeriodicity, double L) {
@@ -43,8 +39,40 @@ public class Particle {
         );
     }
 
+    public void move(double L) {
+        x = x + speed * Math.cos(direction);
+        y = y + speed * Math.sin(direction);
+
+        // Readjust particle if out of bounds
+        x = x % L;
+        if (x < 0) {
+            x += L;
+        }
+        y = y % L;
+        if (y < 0) {
+            y += L;
+        }
+
+        double senTotal = 0;
+        double cosTotal = 0;
+        for (Double dir : neighborDirections) {
+            senTotal += Math.sin(dir);
+            cosTotal += Math.cos(dir);
+        }
+        senTotal += Math.sin(direction);
+        senTotal += Math.cos(direction);
+        senTotal /= neighborDirections.size() + 1;
+        cosTotal /= neighborDirections.size() + 1;
+
+        direction = Math.atan2(senTotal, cosTotal);
+    }
+
     public double getEdgeDistance(Particle p, boolean boundPeriodicity, double L) {
         return getDistance(p, boundPeriodicity, L) - rad - p.rad;
+    }
+
+    public double getDirection() {
+        return direction;
     }
 
     public double getX() {
@@ -55,25 +83,21 @@ public class Particle {
         return y;
     }
 
-    public double getProp() {
-        return prop;
-    }
-
     @Override
     public String toString() {
-        return "%d: %.2f:%.2f".formatted(id, speed, currentDirection);
+        return "%d: %.2f:%.2f".formatted(id, x, y);
     }
 
-    public String stringNeighborhoods() {
-        StringBuilder sb = new StringBuilder()
-                .append(id)
-                .append("\t\t");
-        for (Particle p : neighbors) {
-            sb.append(p.id).append(", ");
-        }
-        sb.replace(sb.length() - 2, sb.length(), "\n");
-        return sb.toString();
-    }
+//    public String stringNeighborhoods() {
+//        StringBuilder sb = new StringBuilder()
+//                .append(id)
+//                .append("\t\t");
+//        for (Particle p : neighbors) {
+//            sb.append(p.id).append(", ");
+//        }
+//        sb.replace(sb.length() - 2, sb.length(), "\n");
+//        return sb.toString();
+//    }
 
     public int getId() {
         return id;
@@ -83,11 +107,12 @@ public class Particle {
         return rad;
     }
 
-    public List<Particle> getNeighbors() {
-        return neighbors;
+    public List<Double> getNeighborDirections() {
+        return neighborDirections;
     }
 
-    public static void setSpeed(double speed) { //TODO: esta bien o muy feo esto?
-        Particle.speed = speed;}
+    public static void setSpeed(double speed) {
+        Particle.speed = speed;
+    }
 
 }

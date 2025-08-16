@@ -1,15 +1,15 @@
 package core;
 
 import tools.GraphRenderer;
-import tools.InputParser;
 import tools.ParticleGenerator;
-import tools.PostProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.List;
 
 //TODO: dejo esto solo para poder verlo... borrar antes de entragar
 public class MainTP1 {
@@ -20,7 +20,6 @@ public class MainTP1 {
     private final static String GENERATE_INPUT_FILES = "generate-input-files";
     private final static String N = "N";
     private final static String L = "L";
-    private final static String M = "M";
     private final static String ID = "ID";
     private final static String PARTICLE_RADIUS = "r";
     private final static String NEIGHBOR_RADIUS = "rc";
@@ -32,31 +31,25 @@ public class MainTP1 {
 
     public static void main(String[] args) {
         boolean generateParticles = Boolean.parseBoolean(System.getProperty(GENERATE_PARTICLES));
-        boolean generateInputFiles = Boolean.parseBoolean(System.getProperty(GENERATE_INPUT_FILES));
         boolean showGraph = Boolean.parseBoolean(System.getProperty(SHOW_GRAPH));
         boolean showIDS = Boolean.parseBoolean(System.getProperty(SHOW_IDS));
         int n = Integer.parseInt(System.getProperty(N));
         int id = Integer.parseInt(System.getProperty(ID));
-        int m = Integer.parseInt(System.getProperty(M));
         double l = Double.parseDouble(System.getProperty(L));
         boolean boundPeriodicity = Boolean.parseBoolean(System.getProperty(BOUND_PERIODICITY));
         boolean saveGraph = Boolean.parseBoolean(System.getProperty(SAVE_GRAPH));
         double neighborRadius = Double.parseDouble(System.getProperty(NEIGHBOR_RADIUS));
-        Grid grid = new Grid(l, m);
+        Grid grid = new Grid(l, 500, neighborRadius, boundPeriodicity);
 
         if (generateParticles) {
             double particleRadius = Double.parseDouble(System.getProperty(PARTICLE_RADIUS));
             boolean fixedRadius = Boolean.parseBoolean(System.getProperty(FIXED_RADIUS));
-            ParticleGenerator.generate(n, l, grid::addParticle, particleRadius, fixedRadius, 0.03);
+            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), particleRadius, fixedRadius, 0.03);
         } else {
             parseInput(grid, n);
         }
 
-        long startTime = System.currentTimeMillis();
-        grid.performCellIndexMethod(neighborRadius, boundPeriodicity);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        PostProcessor.process(grid.getParticles(), elapsedTime);
+        grid.performCellIndexMethod();
         if (saveGraph){
             try {
                 GraphRenderer.saveGridImage(grid, id, showIDS);
@@ -65,7 +58,13 @@ public class MainTP1 {
             }
         }
         if (showGraph) {
-            GraphRenderer.show(grid, id, showIDS);
+            Iterator<List<Particle>> iter = grid.iterator();
+            for (int i = 0; iter.hasNext(); i++) {
+                if (i == 0)
+                    GraphRenderer.show(grid, id, showIDS); // print first grid
+                iter.next();
+            }
+            GraphRenderer.show(grid, id, showIDS); // print last grid
         }
     }
 
@@ -78,6 +77,4 @@ public class MainTP1 {
             throw new RuntimeException(e);
         }
     }
-
-
 }

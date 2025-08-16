@@ -39,13 +39,6 @@ public class GraphRenderer extends JPanel {
             Color fill;
             if (p.getId() == selected) {
                 fill = new Color(28, 104, 255, alpha);  // yellow
-            } else if (grid.getParticles()
-                    .stream()
-                    .filter(pp -> pp.getId() == selected)
-                    .findFirst()
-                    .map(target -> target.getNeighbors().contains(p))
-                    .orElse(false)) {
-                fill = new Color(255, 165,   0, alpha);  // orange
             } else {
                 fill = new Color(255,   0,   0, alpha);  // red
             }
