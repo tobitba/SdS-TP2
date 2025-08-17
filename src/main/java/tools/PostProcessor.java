@@ -11,6 +11,7 @@ import java.util.List;
 public class PostProcessor implements Closeable {
     private static final String OUTPUT_FILE_NAME = "dynamicOutput.txt";
     private final BufferedWriter writer;
+    private int currentEpoch = 0;
 
     public PostProcessor() {
         try {
@@ -20,9 +21,9 @@ public class PostProcessor implements Closeable {
         }
     }
 
-    public void processEpoch(List<Particle> particles, int epoch) {
+    public void processEpoch(List<Particle> particles) {
         try {
-            writer.write(String.valueOf(epoch));
+            writer.write(String.valueOf(currentEpoch++));
             writer.newLine();
             particles.forEach(this::processParticle);
         } catch (IOException e) {

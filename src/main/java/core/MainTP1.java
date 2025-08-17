@@ -45,7 +45,7 @@ public class MainTP1 {
         if (generateParticles) {
             double particleRadius = Double.parseDouble(System.getProperty(PARTICLE_RADIUS));
             boolean fixedRadius = Boolean.parseBoolean(System.getProperty(FIXED_RADIUS));
-            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 5);
+            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 0.03);
         } else {
             parseInput(grid, n);
         }
@@ -62,7 +62,7 @@ public class MainTP1 {
             PostProcessor postProcessor = new PostProcessor();
             Iterator<List<Particle>> iter = grid.iterator();
             for (int i = 0; iter.hasNext(); i++) {
-                postProcessor.processEpoch(iter.next(),i);
+                postProcessor.processEpoch(iter.next());
                 if (i == 0)
                     GraphRenderer.show(grid, id, showIDS); // print first grid
             }
