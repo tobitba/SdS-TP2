@@ -30,7 +30,7 @@ public class MainTP1 {
     private final static String SAVE_GRAPH = "save";
     private final static String SHOW_IDS = "show-ids";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         boolean generateParticles = Boolean.parseBoolean(System.getProperty(GENERATE_PARTICLES));
         boolean showGraph = Boolean.parseBoolean(System.getProperty(SHOW_GRAPH));
         boolean showIDS = Boolean.parseBoolean(System.getProperty(SHOW_IDS));
@@ -40,12 +40,12 @@ public class MainTP1 {
         boolean boundPeriodicity = Boolean.parseBoolean(System.getProperty(BOUND_PERIODICITY));
         boolean saveGraph = Boolean.parseBoolean(System.getProperty(SAVE_GRAPH));
         double neighborRadius = Double.parseDouble(System.getProperty(NEIGHBOR_RADIUS));
-        Grid grid = new Grid(l, 500, neighborRadius, boundPeriodicity);
+        Grid grid = new Grid(l, 100, neighborRadius, boundPeriodicity);
 
         if (generateParticles) {
             double particleRadius = Double.parseDouble(System.getProperty(PARTICLE_RADIUS));
             boolean fixedRadius = Boolean.parseBoolean(System.getProperty(FIXED_RADIUS));
-            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 0.03);
+            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 5);
         } else {
             parseInput(grid, n);
         }
@@ -67,6 +67,7 @@ public class MainTP1 {
                     GraphRenderer.show(grid, id, showIDS); // print first grid
             }
             GraphRenderer.show(grid, id, showIDS); // print last grid
+            postProcessor.close();
         }
     }
 

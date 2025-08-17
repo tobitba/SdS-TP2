@@ -3,11 +3,12 @@ package tools;
 import core.Particle;
 
 import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class PostProcessor {
+public class PostProcessor implements Closeable {
     private static final String OUTPUT_FILE_NAME = "dynamicOutput.txt";
     private final BufferedWriter writer;
 
@@ -38,4 +39,8 @@ public class PostProcessor {
         }
     }
 
+    @Override
+    public void close() throws IOException {
+        writer.close();
+    }
 }
