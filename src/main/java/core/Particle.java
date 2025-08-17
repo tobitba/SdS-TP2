@@ -2,15 +2,18 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Particle {
     private static int globalId = 1;
+    private static double halfNoise;
     private final int id;
     private double x, y;
     private final double rad;
     private static double speed;
     private double direction;
     private final List<Double> neighborDirections;
+    private final Random noiseRandom;
 
     public Particle(double x, double y, double rad, double direction) {
         this.id = globalId++;
@@ -19,6 +22,7 @@ public class Particle {
         this.rad = rad;
         this.neighborDirections = new ArrayList<>();
         this.direction = direction;
+        this.noiseRandom = new Random();
     }
 
     public void addNeighborDirection(Double neighborDirection) {
@@ -63,8 +67,11 @@ public class Particle {
         senTotal += Math.cos(direction);
         senTotal /= neighborDirections.size() + 1;
         cosTotal /= neighborDirections.size() + 1;
-
         direction = Math.atan2(senTotal, cosTotal);
+        if(halfNoise > 0) { //TODO: evaluar complejidad, por ahi se puede poner el check en un solo lugar y no en todas las particulas
+            direction += noiseRandom.nextDouble(-halfNoise , halfNoise);
+        }
+
     }
 
     public double getEdgeDistance(Particle p, boolean boundPeriodicity, double L) {
@@ -88,17 +95,6 @@ public class Particle {
         return "%d;%.2f;%.2f;%.2f".formatted(id, x, y, direction);
     }
 
-//    public String stringNeighborhoods() {
-//        StringBuilder sb = new StringBuilder()
-//                .append(id)
-//                .append("\t\t");
-//        for (Particle p : neighbors) {
-//            sb.append(p.id).append(", ");
-//        }
-//        sb.replace(sb.length() - 2, sb.length(), "\n");
-//        return sb.toString();
-//    }
-
     public int getId() {
         return id;
     }
@@ -113,6 +109,10 @@ public class Particle {
 
     public static void setSpeed(double speed) {
         Particle.speed = speed;
+    }
+
+    public static void setNoise(double noise) {
+        Particle.halfNoise = noise/2;
     }
 
 }

@@ -10,6 +10,7 @@ public class OffLatticeSimulation {
     private final static String V = "V";
     private final static String NEIGHBOR_RADIUS = "rc";
     private final static String EPOCH = "epoch";
+    private final static String NOISE = "noise";
 
 
     public static void main(String[] args) {
@@ -17,16 +18,18 @@ public class OffLatticeSimulation {
         double l = Double.parseDouble(System.getProperty(L));
         double v = Double.parseDouble(System.getProperty(V));
         double neighborRadius = Double.parseDouble(System.getProperty(NEIGHBOR_RADIUS));
+        double noise = Double.parseDouble(System.getProperty(NOISE));
         int epoch = Integer.parseInt(System.getProperty(EPOCH));
 
         Grid grid = new Grid(l,epoch,neighborRadius,true); //TODO: sacar el boolean boundPeriodicity, siempre va a ser asi
-        ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), v);
-
+        ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), v, noise);
+        long init =  System.currentTimeMillis();
         try(PostProcessor postProcessor  = new PostProcessor()){
             grid.iterator().forEachRemaining(postProcessor::processEpoch);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(System.currentTimeMillis() - init);
 
 
     }

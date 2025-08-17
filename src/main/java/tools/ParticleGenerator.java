@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 public class ParticleGenerator {
 
-    public static void generate(int particleNumber, double gridSize, Consumer<Particle> consumer, double speed) {
+    public static void generate(int particleNumber, double gridSize, Consumer<Particle> consumer, double speed, double noise) {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         double x;
@@ -20,6 +20,7 @@ public class ParticleGenerator {
             consumer.accept(new Particle(x, y,0, direction));//TODO: remove radius from particle
         }
         Particle.setSpeed(speed);
+        Particle.setNoise(noise);
     }
 
 

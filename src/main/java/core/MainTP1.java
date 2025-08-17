@@ -45,7 +45,7 @@ public class MainTP1 {
         if (generateParticles) {
             double particleRadius = Double.parseDouble(System.getProperty(PARTICLE_RADIUS));
             boolean fixedRadius = Boolean.parseBoolean(System.getProperty(FIXED_RADIUS));
-            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 0.03);
+            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 0.03,0);
         } else {
             parseInput(grid, n);
         }
