@@ -61,7 +61,7 @@ public class Particle {
             cosTotal += Math.cos(dir);
         }
         senTotal += Math.sin(direction);
-        senTotal += Math.cos(direction);
+        cosTotal += Math.cos(direction);
         senTotal /= neighborDirections.size() + 1;
         cosTotal /= neighborDirections.size() + 1;
         direction = Math.atan2(senTotal, cosTotal);
