@@ -45,7 +45,12 @@ public class Grid implements Iterable<List<Particle>>{
      * Particles on horizontal cell borders go to the upper cell,
      * and particles on vertical cell borders go to the right cell.
     */
-    public void addParticle(Particle particle, boolean addToList) { // TODO es nefasto el boolean de si agregarlo a la lista o no
+    public void addParticle(Particle particle) {
+        addParticleToGrid(particle);
+        particles.add(particle);
+    }
+
+    private void addParticleToGrid(Particle particle) {
         double parX = particle.getX();
         double parY = particle.getY();
         double parRad = particle.getRad();
@@ -56,8 +61,6 @@ public class Grid implements Iterable<List<Particle>>{
             throw new IllegalArgumentException("The particle is not a point particle");
         int i = (int) (parX / cellLength) + M * (int) (parY / cellLength);
         grid.get(i).add(particle);
-        if (addToList)
-            particles.add(particle);
     }
 
 
@@ -105,7 +108,7 @@ public class Grid implements Iterable<List<Particle>>{
                 }
 
                 for (Particle particle : getParticles()) {
-                    addParticle(particle, false);
+                    addParticleToGrid(particle);
                 }
 
                 epoch++;

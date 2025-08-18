@@ -32,7 +32,7 @@ public class MainTP1 {
         Grid grid = new Grid(l, 100, neighborRadius);
 
         if (generateParticles) {
-            ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), 0.03,0);
+            ParticleGenerator.generate(n, l, grid::addParticle, 0.03,0);
         } else {
             System.out.println("Turn generateParticles to True");
         }

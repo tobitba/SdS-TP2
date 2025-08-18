@@ -22,7 +22,7 @@ public class OffLatticeSimulation {
         int epoch = Integer.parseInt(System.getProperty(EPOCH));
 
         Grid grid = new Grid(l, epoch, neighborRadius);
-        ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), v, noise);
+        ParticleGenerator.generate(n, l, grid::addParticle, v, noise);
         long init =  System.currentTimeMillis();
         try(PostProcessor postProcessor  = new PostProcessor()){
             grid.iterator().forEachRemaining(postProcessor::processEpoch);
