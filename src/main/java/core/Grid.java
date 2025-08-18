@@ -10,7 +10,6 @@ public class Grid implements Iterable<List<Particle>>{
     private final int M;
     private final int maxEpoch;
     private final double neighborRadius;
-    private final boolean boundPeriodicity;
     private final double cellLength;
 
     private int epoch;
@@ -18,7 +17,7 @@ public class Grid implements Iterable<List<Particle>>{
     private List<List<Particle>> grid;
     private final List<Particle> particles;
 
-    public Grid(double L, int M, int maxEpoch, double neighborRadius, boolean boundPeriodicity) {
+    public Grid(double L, int M, int maxEpoch, double neighborRadius) {
         if (M <= 0 || L <= 0 || maxEpoch <= 0 || neighborRadius <= 0)
             throw new IllegalArgumentException("M, L, maxEpoch and neighborRadius must be positive");
         if (M >= L/neighborRadius)
@@ -27,7 +26,6 @@ public class Grid implements Iterable<List<Particle>>{
         this.M = M;
         this.maxEpoch = maxEpoch;
         this.neighborRadius = neighborRadius;
-        this.boundPeriodicity = boundPeriodicity;
         this.cellLength = L / M;
 
         epoch = 0;
@@ -39,8 +37,8 @@ public class Grid implements Iterable<List<Particle>>{
         }
     }
 
-    public Grid(double L, int maxEpoch, double neighborRadius, boolean boundPeriodicity) {
-        this(L, (int) (L/neighborRadius), maxEpoch, neighborRadius, boundPeriodicity);
+    public Grid(double L, int maxEpoch, double neighborRadius) {
+        this(L, (int) (L/neighborRadius), maxEpoch, neighborRadius);
     }
 
     /**
@@ -62,10 +60,6 @@ public class Grid implements Iterable<List<Particle>>{
             particles.add(particle);
     }
 
-    /** To find the amount of particles per cell */
-    public String getParticlesPerCell() {
-        return getCustomGridRepresentation(cellParticles -> String.valueOf(cellParticles.size()));
-    }
 
     @Override
     public String toString() {
@@ -124,15 +118,15 @@ public class Grid implements Iterable<List<Particle>>{
     public void performCellIndexMethod() {
         for (int i = 0; i < M*M; i++) {
             for (Particle particle : grid.get(i)) {
-                List<Particle> neighbors = getAboveAndRightAdjacentParticles(i, boundPeriodicity, particle);
+                List<Particle> neighbors = getAboveAndRightAdjacentParticles(i, particle);
                 for (Particle neighbor : neighbors) {
-                    if (neighbor.getEdgeDistance(particle, boundPeriodicity, L) <= neighborRadius) {
+                    if (neighbor.getEdgeDistance(particle, L) <= neighborRadius) {
                         particle.addNeighborDirection(neighbor.getDirection());
                         neighbor.addNeighborDirection(particle.getDirection());
                     }
                 }
                 for (Particle neighbor : getCurrentCellParticles(i, particle)) {
-                    if (neighbor.getEdgeDistance(particle, boundPeriodicity, L) <= neighborRadius)
+                    if (neighbor.getEdgeDistance(particle, L) <= neighborRadius)
                         particle.addNeighborDirection(neighbor.getDirection());
                 }
 
@@ -140,7 +134,7 @@ public class Grid implements Iterable<List<Particle>>{
         }
     }
 
-    private List<Particle> getAboveAndRightAdjacentParticles(int cellIndex, boolean boundPeriodicity, Particle particle) {
+    private List<Particle> getAboveAndRightAdjacentParticles(int cellIndex, Particle particle) {
         List<Particle> adjacentParticles = new ArrayList<>();
 
         int row = cellIndex / M;
@@ -156,16 +150,13 @@ public class Grid implements Iterable<List<Particle>>{
             int newRow = row + dir[0];
             int newCol = col + dir[1];
 
-            if (boundPeriodicity) {
-                newRow = (newRow + M) % M;
-                newCol = (newCol + M) % M;
-            }
+            newRow = (newRow + M) % M;
+            newCol = (newCol + M) % M;
 
             if (newRow >= 0 && newRow < M && newCol >= 0 && newCol < M) {
                 int neighborCellIndex = newRow * M + newCol;
                 adjacentParticles.addAll(grid.get(neighborCellIndex));
-                if (boundPeriodicity)
-                    adjacentParticles.remove(particle);
+                adjacentParticles.remove(particle);
             }
         }
 

@@ -21,7 +21,7 @@ public class OffLatticeSimulation {
         double noise = Double.parseDouble(System.getProperty(NOISE));
         int epoch = Integer.parseInt(System.getProperty(EPOCH));
 
-        Grid grid = new Grid(l,epoch,neighborRadius,true); //TODO: sacar el boolean boundPeriodicity, siempre va a ser asi
+        Grid grid = new Grid(l, epoch, neighborRadius);
         ParticleGenerator.generate(n, l, particle -> grid.addParticle(particle, true), v, noise);
         long init =  System.currentTimeMillis();
         try(PostProcessor postProcessor  = new PostProcessor()){

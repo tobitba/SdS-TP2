@@ -29,10 +29,7 @@ public class Particle {
         this.neighborDirections.add(neighborDirection);
     }
 
-    private double getDistance(Particle p, boolean boundPeriodicity, double L) {
-        if (!boundPeriodicity)
-            return Math.sqrt(Math.pow(p.x - x, 2) + Math.pow(p.y - y, 2));
-
+    private double getDistance(Particle p, double L) {
         return Math.sqrt(
                     Math.pow(
                             Math.min(Math.abs(p.x - x), L - Math.abs(p.x - x)), 2
@@ -74,8 +71,8 @@ public class Particle {
 
     }
 
-    public double getEdgeDistance(Particle p, boolean boundPeriodicity, double L) {
-        return getDistance(p, boundPeriodicity, L) - rad - p.rad;
+    public double getEdgeDistance(Particle p, double L) {
+        return getDistance(p, L) - rad - p.rad;
     }
 
     public double getDirection() {
