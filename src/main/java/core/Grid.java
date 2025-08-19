@@ -119,6 +119,8 @@ public class Grid implements Iterable<List<Particle>>{
 
 
     public void performCellIndexMethod() {
+        for (Particle p : getParticles())
+            p.resetNeighbors();
         for (int i = 0; i < M*M; i++) {
             for (Particle particle : grid.get(i)) {
                 List<Particle> neighbors = getAboveAndRightAdjacentParticles(i, particle);

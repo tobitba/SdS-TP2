@@ -29,6 +29,10 @@ public class Particle {
         this.neighborDirections.add(neighborDirection);
     }
 
+    public void resetNeighbors(){
+        this.neighborDirections.clear();
+    }
+
     private double getDistance(Particle p, double L) {
         return Math.sqrt(
                     Math.pow(
