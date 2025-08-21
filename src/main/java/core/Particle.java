@@ -93,6 +93,10 @@ public class Particle {
 
     @Override
     public String toString() {
+        return "%d: x=%.2f y=%.2f dir=%.2f".formatted(id, x, y, direction);
+    }
+
+    public String csvString() {
         return "%d;%.2f;%.2f;%.2f".formatted(id, x, y, direction);
     }
 

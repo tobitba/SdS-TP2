@@ -33,7 +33,7 @@ public class PostProcessor implements Closeable {
 
     private void processParticle(Particle particle) {
         try {
-            writer.write(particle.toString());
+            writer.write(particle.csvString());
             writer.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Error writing on output file");
