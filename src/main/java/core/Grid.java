@@ -38,7 +38,7 @@ public class Grid implements Iterable<List<Particle>>{
     }
 
     public Grid(double L, int maxEpoch, double neighborRadius) {
-        this(L, (int) (L/neighborRadius), maxEpoch, neighborRadius);
+        this(L, (int) Math.round(Math.ceil(L/neighborRadius - 1)), maxEpoch, neighborRadius);
     }
 
     /**
