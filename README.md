@@ -10,8 +10,12 @@ Trabajo práctico para la materia de Simulación de Sistemas en el ITBA. Se busc
 - Maven
 
 ## 🏃 Ejecución
+Primero se requiere compilar el paquete
+```shell
+mvn clean package
+```
 
-Se puede correr el programa por consola con el siguiente comando:
+Finalmente se puede correr el programa por consola con el siguiente comando:
 ```bash
 java {args} -cp {JAR_FILE} {MAIN_CLASS}
 ```
@@ -29,6 +33,12 @@ Donde los argumentos son los siguientes:
 - `epoch`: Cantidad de épocas de la simulación
 - `noise`: Ruido con el que se moverá el ángulo de las partículas
 - `rand-dir`: true si se desea tomar una dirección random de los vecinos, false si se desea hacer un promedio de las direcciones vecinas
+
+Ejemplo:
+```shell
+ java -DN=1000 -DL=20 "-DV=0.3" -Drc=1 -Depoch=1000 -Dnoise=0 -Drand-dir=false -cp target/SdS-TP2-1.0-SNAPSHOT.jar OffLatticeSimulation
+```
+Nota: Los argumentos con punto pueden requerir estar en comillas dobles, como el caso de la velocidad.
 
 ## 🔎 Animación y Análisis
 Las animaciones y análisis se realizaron en este [colab](https://colab.research.google.com/drive/1JuF0k8cnBpoqezo86U3zJO3Gzo28ERoR?authuser=2#scrollTo=LbGdq9SN06eL).
