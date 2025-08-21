@@ -23,7 +23,7 @@ public class ParticleGenerator {
             x = random.nextDouble() * gridSize;
             y = random.nextDouble() * gridSize;
             direction = random.nextDouble(-Math.PI, Math.PI);
-            consumer.accept(new Particle(x, y,0, direction));//TODO: remove radius from particle
+            consumer.accept(new Particle(x, y, direction));
         }
         Particle.setSpeed(speed);
         Particle.setNoise(noise);

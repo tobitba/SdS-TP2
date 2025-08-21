@@ -16,11 +16,11 @@ public class Particle {
     private final List<Double> neighborDirections;
     private final Random randomGenerator;
 
-    public Particle(double x, double y, double rad, double direction) {
+    public Particle(double x, double y, double direction) {
         this.id = globalId++;
         this.x = x;
         this.y = y;
-        this.rad = rad;
+        this.rad = 0;
         this.neighborDirections = new ArrayList<>();
         this.direction = direction;
         this.randomGenerator = new Random();
@@ -108,7 +108,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return "%d: x=%.2f y=%.2f dir=%.2f".formatted(id, x, y, direction);
+        return "%d: x=%.2f y=%.2f dir=%.2f".formatted(getId(), x, y, direction);
     }
 
     public String csvString() {
