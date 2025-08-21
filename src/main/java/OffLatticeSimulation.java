@@ -11,6 +11,7 @@ public class OffLatticeSimulation {
     private final static String NEIGHBOR_RADIUS = "rc";
     private final static String EPOCH = "epoch";
     private final static String NOISE = "noise";
+    private final static String RANDOM_NEIGHBOR_DIRECTION = "rand-dir";
 
 
     public static void main(String[] args) {
@@ -20,9 +21,10 @@ public class OffLatticeSimulation {
         double neighborRadius = Double.parseDouble(System.getProperty(NEIGHBOR_RADIUS));
         double noise = Double.parseDouble(System.getProperty(NOISE));
         int epoch = Integer.parseInt(System.getProperty(EPOCH));
+        boolean randomNeighborDirection = Boolean.parseBoolean(System.getProperty(RANDOM_NEIGHBOR_DIRECTION));
 
         Grid grid = new Grid(l, epoch, neighborRadius);
-        ParticleGenerator.generate(n, l, grid::addParticle, v, noise);
+        ParticleGenerator.generate(n, l, grid::addParticle, v, noise, randomNeighborDirection);
         long init =  System.currentTimeMillis();
         try(PostProcessor postProcessor  = new PostProcessor()){
             grid.iterator().forEachRemaining(postProcessor::processEpoch);

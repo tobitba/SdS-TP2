@@ -7,13 +7,14 @@ import java.util.Random;
 public class Particle {
     private static int globalId = 1;
     private static double halfNoise;
+    private static boolean randomNeighborDirection = false;
     private final int id;
     private double x, y;
     private final double rad;
     private static double speed;
     private double direction;
     private final List<Double> neighborDirections;
-    private final Random noiseRandom;
+    private final Random randomGenerator;
 
     public Particle(double x, double y, double rad, double direction) {
         this.id = globalId++;
@@ -22,7 +23,7 @@ public class Particle {
         this.rad = rad;
         this.neighborDirections = new ArrayList<>();
         this.direction = direction;
-        this.noiseRandom = new Random();
+        this.randomGenerator = new Random();
     }
 
     public void addNeighborDirection(Double neighborDirection) {
@@ -58,6 +59,16 @@ public class Particle {
             y += L;
         }
 
+        if (Particle.randomNeighborDirection)
+            moveToRandomNeighborDirection();
+        else
+            moveToAverageNeighborDirection();
+        if(halfNoise > 0) {
+            direction += randomGenerator.nextDouble(-halfNoise , halfNoise);
+        }
+    }
+
+    private void moveToAverageNeighborDirection() {
         double senTotal = 0;
         double cosTotal = 0;
         for (Double dir : neighborDirections) {
@@ -69,11 +80,15 @@ public class Particle {
         senTotal /= neighborDirections.size() + 1;
         cosTotal /= neighborDirections.size() + 1;
         direction = Math.atan2(senTotal, cosTotal);
-        if(halfNoise > 0) { //TODO: evaluar complejidad, por ahi se puede poner el check en un solo lugar y no en todas las particulas
-            direction += noiseRandom.nextDouble(-halfNoise , halfNoise);
-        }
-
     }
+
+    private void moveToRandomNeighborDirection() {
+        if (!neighborDirections.isEmpty()) {
+            int idx = randomGenerator.nextInt(neighborDirections.size());
+            direction = neighborDirections.get(idx);
+        }
+    }
+
 
     public double getEdgeDistance(Particle p, double L) {
         return getDistance(p, L) - rad - p.rad;
@@ -108,10 +123,6 @@ public class Particle {
         return rad;
     }
 
-    public List<Double> getNeighborDirections() {
-        return neighborDirections;
-    }
-
     public static void setSpeed(double speed) {
         Particle.speed = speed;
     }
@@ -119,5 +130,7 @@ public class Particle {
     public static void setNoise(double noise) {
         Particle.halfNoise = noise/2;
     }
+
+    public static void setRandomNeighborDirection(boolean randomNeighborDirection) { Particle.randomNeighborDirection = randomNeighborDirection; }
 
 }

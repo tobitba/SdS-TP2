@@ -28,6 +28,7 @@ Donde los argumentos son los siguientes:
 - `rc`: Radio de búsqueda de vecinos
 - `epoch`: Cantidad de épocas de la simulación
 - `noise`: Ruido con el que se moverá el ángulo de las partículas
+- `rand-dir`: true si se desea tomar una dirección random de los vecinos, false si se desea hacer un promedio de las direcciones vecinas
 
 ## 🔎 Animación y Análisis
 Las animaciones y análisis se realizaron en este [colab](https://colab.research.google.com/drive/1JuF0k8cnBpoqezo86U3zJO3Gzo28ERoR?authuser=2#scrollTo=LbGdq9SN06eL).

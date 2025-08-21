@@ -7,7 +7,13 @@ import java.util.function.Consumer;
 
 public class ParticleGenerator {
 
-    public static void generate(int particleNumber, double gridSize, Consumer<Particle> consumer, double speed, double noise) {
+    public static void generate(
+            int particleNumber,
+            double gridSize,
+            Consumer<Particle> consumer,
+            double speed,
+            double noise,
+            boolean randomNeighborDirection) {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         double x;
@@ -21,6 +27,7 @@ public class ParticleGenerator {
         }
         Particle.setSpeed(speed);
         Particle.setNoise(noise);
+        Particle.setRandomNeighborDirection(randomNeighborDirection);
     }
 
 
