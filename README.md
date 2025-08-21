@@ -11,26 +11,23 @@ Trabajo práctico para la materia de Simulación de Sistemas en el ITBA. Se busc
 
 ## 🏃 Ejecución
 
-// _TODO_: Modificar la parte de ejecución
-
 Se puede correr el programa por consola con el siguiente comando:
 ```bash
-./run.sh  -Dargumento=valor
+java {args} -cp {JAR_FILE} {MAIN_CLASS}
 ```
+Con:
+- `JAR_FILE` = target/SdS-TP2-1.0-SNAPSHOT.jar
+- `MAIN_CLASS` = OffLatticeSimulation
+- `args` obligatorios listados en la siguiente sección
 
 ### 🛠️ Argumentos
-Donde los argumentos posibles son los siguientes:
-- `generate`: Si se desea generar o no aleatoriamente las particulas setear en true
-- `static`: Ruta al archivo estatico (en caso de no generar)
-- `dynamic`: Ruta al archivo dinamico (en caso de no generar)
+Donde los argumentos son los siguientes:
 - `N`: Cantidad de particulas
 - `L`: Tamaño del dominio
-- `M`: Cantidad de celdas
-- `ID`: Particula a resaltar en grafico
-- `r`: Radio de las particulas generadas. Si fixed=false las particulas tendran radios aleatorios entre [0,r)
-- `rc`: Radio de busqueda de vecinos
-- `bound-periodicity`: Setear en true si se quiere usar condiciones periodicas de contorno
-- `fixed`: Para usar el mismo r para todas las particulas aleatoriamente generadas setear en true
-- `graph`: Para mostrar el grafico setear en true
-- `save`: Para guardar el grafico setear en true
-- `show-ids`: mostrar ids en gráfico
+- `V`: Velocidad de las partículas en la simulación
+- `rc`: Radio de búsqueda de vecinos
+- `epoch`: Cantidad de épocas de la simulación
+- `noise`: Ruido con el que se moverá el ángulo de las partículas
+
+## 🔎 Animación y Análisis
+Las animaciones y análisis se realizaron en este [colab](https://colab.research.google.com/drive/1JuF0k8cnBpoqezo86U3zJO3Gzo28ERoR?authuser=2#scrollTo=LbGdq9SN06eL).
