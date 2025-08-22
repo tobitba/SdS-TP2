@@ -33,6 +33,7 @@ Donde los argumentos son los siguientes:
 - `epoch`: Cantidad de épocas de la simulación
 - `noise`: Ruido con el que se moverá el ángulo de las partículas
 - `rand-dir`: true si se desea tomar una dirección random de los vecinos, false si se desea hacer un promedio de las direcciones vecinas
+- `output`: Nombre opcional para el archivo de salida de la simulación
 
 Ejemplo:
 ```shell

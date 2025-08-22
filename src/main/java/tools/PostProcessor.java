@@ -13,9 +13,11 @@ public class PostProcessor implements Closeable {
     private final BufferedWriter writer;
     private int currentEpoch = 0;
 
-    public PostProcessor() {
+    public PostProcessor(String outputName) {
         try {
-            writer = new BufferedWriter(new FileWriter(OUTPUT_FILE_NAME));
+            if (outputName == null)
+                outputName = OUTPUT_FILE_NAME;
+            writer = new BufferedWriter(new FileWriter(outputName));
         } catch (IOException e) {
             throw new RuntimeException("Error opening file");
         }
