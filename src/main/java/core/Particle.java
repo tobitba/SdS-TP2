@@ -10,7 +10,6 @@ public class Particle {
     private static boolean randomNeighborDirection = false;
     private final int id;
     private double x, y;
-    private final double rad;
     private static double speed;
     private double direction;
     private final List<Double> neighborDirections;
@@ -20,7 +19,6 @@ public class Particle {
         this.id = globalId++;
         this.x = x;
         this.y = y;
-        this.rad = 0;
         this.neighborDirections = new ArrayList<>();
         this.direction = direction;
         this.randomGenerator = new Random();
@@ -34,7 +32,7 @@ public class Particle {
         this.neighborDirections.clear();
     }
 
-    private double getDistance(Particle p, double L) {
+    public double getDistance(Particle p, double L) {
         return Math.sqrt(
                     Math.pow(
                             Math.min(Math.abs(p.x - x), L - Math.abs(p.x - x)), 2
@@ -89,11 +87,6 @@ public class Particle {
         }
     }
 
-
-    public double getEdgeDistance(Particle p, double L) {
-        return getDistance(p, L) - rad - p.rad;
-    }
-
     public double getDirection() {
         return direction;
     }
@@ -117,10 +110,6 @@ public class Particle {
 
     public int getId() {
         return id;
-    }
-
-    public double getRad() {
-        return rad;
     }
 
     public static void setSpeed(double speed) {

@@ -53,12 +53,9 @@ public class Grid implements Iterable<List<Particle>>{
     private void addParticleToGrid(Particle particle) {
         double parX = particle.getX();
         double parY = particle.getY();
-        double parRad = particle.getRad();
 
         if (parX >= L || parX < 0 || parY >= L || parY < 0)
             throw new IndexOutOfBoundsException("The particle doesn't fit on the grid");
-        if (Double.compare(parRad, 0) != 0)
-            throw new IllegalArgumentException("The particle is not a point particle");
         int i = (int) (parX / cellLength) + M * (int) (parY / cellLength);
         grid.get(i).add(particle);
     }
@@ -125,13 +122,13 @@ public class Grid implements Iterable<List<Particle>>{
             for (Particle particle : grid.get(i)) {
                 List<Particle> neighbors = getAboveAndRightAdjacentParticles(i, particle);
                 for (Particle neighbor : neighbors) {
-                    if (neighbor.getEdgeDistance(particle, L) <= neighborRadius) {
+                    if (neighbor.getDistance(particle, L) <= neighborRadius) {
                         particle.addNeighborDirection(neighbor.getDirection());
                         neighbor.addNeighborDirection(particle.getDirection());
                     }
                 }
                 for (Particle neighbor : getCurrentCellParticles(i, particle)) {
-                    if (neighbor.getEdgeDistance(particle, L) <= neighborRadius)
+                    if (neighbor.getDistance(particle, L) <= neighborRadius)
                         particle.addNeighborDirection(neighbor.getDirection());
                 }
 
@@ -172,13 +169,5 @@ public class Grid implements Iterable<List<Particle>>{
         List<Particle> toReturn = new ArrayList<>(grid.get(i));
         toReturn.remove(p);
         return toReturn;
-    }
-
-    public int getM() {
-        return M;
-    }
-
-    public double getL() {
-        return L;
     }
 }
